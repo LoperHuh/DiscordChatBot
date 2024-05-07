@@ -30,7 +30,7 @@ public class GuildEnvironment
         var services = new ServiceCollection()
             .AddSingleton(guildDataProvider)
             .AddSingleton(chatGptApi)
-            .AddSingleton<EchoCommandAction>()
+            .AddSingleton<ICommandAction, EchoCommandAction>()
             .AddSingleton<Localizator>(localizator)
             .AddTransient<ICommandAction, ChatGPTAction>()
             .AddTransient<ICommandAction, GuildSettingsAction>(_ =>
@@ -46,13 +46,14 @@ public class GuildEnvironment
         {
             return new MessageHandleResult();
         }
+
         //TODO: обернуть в скоуп и доп зависимостью прокинуть guid канала
         var messageAction = actionDictionary[commandContent.Command];
         var respondTask = messageAction(commandContent.Content);
         using (socketMessage.Channel.EnterTypingState())
         {
             var output = await respondTask;
-            await PrintTextAsync(socketMessage, output.Message); 
+            await PrintTextAsync(socketMessage, output.Message);
         }
 
         return respondTask.Result;
