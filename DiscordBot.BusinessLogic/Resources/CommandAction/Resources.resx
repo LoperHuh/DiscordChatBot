@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="CBCommandDesc" xml:space="preserve">
+        <value>CoffeeBracke command. Input time after command. Press to emoji below answer to be notified when the timer goes off.</value>
+    </data>
+    <data name="CBCommandExample" xml:space="preserve">
+        <value>Command example !cb 19:00</value>
+    </data>
+    <data name="CBInputError" xml:space="preserve">
+        <value>Command entered without time.</value>
+    </data>
+    <data name="ParsingError" xml:space="preserve">
+        <value>Cant parse value</value>
+    </data>
+    <data name="EchoCommandDesc" xml:space="preserve">
+        <value>Bot test. Respond with text after command or "Hello" if command empty</value>
+    </data>
+    <data name="EchoDefaultResponse" xml:space="preserve">
+        <value>Hello there</value>
+    </data>
+    <data name="SettingsSetTimeZone" xml:space="preserve">
+        <value>Set timezone offset from utc</value>
+    </data>
+    <data name="SettingsSetTimeZoneExample" xml:space="preserve">
+        <value>Command example for UTC +5 !SetTZ 5 </value>
+    </data>
+    <data name="SettingsGetTimeZone" xml:space="preserve">
+        <value>Get sever timezone</value>
+    </data>
+    <data name="Applied" xml:space="preserve">
+        <value>Applied</value>
+    </data>
+    <data name="SettingsGetCurrentLocale" xml:space="preserve">
+        <value>Get bot localization</value>
+    </data>  
+    <data name="SettingsSetCurrentLocale" xml:space="preserve">
+        <value>Set bot localization</value>
+    </data>
+    <data name="SettingsLocaleSettedtCurrentLocale" xml:space="preserve">
+        <value>Locale setted</value>
+    </data>
+    <data name="CBCommandTimerSetted" xml:space="preserve">
+        <value>Timer will fire in {0} hours {1} minutes. Press emoji to get notified!</value>
+    </data>
+    <data name="CBCommandTimerIsDue" xml:space="preserve">
+        <value>Its coffee break time! {0}</value>
+    </data>
+    <data name="AIChatDescription" xml:space="preserve">
+        <value>Send message to chat GPT (3.5)</value>
+    </data>
+    <data name="AIMessageSended" xml:space="preserve">
+        <value>Await response...</value>
+    </data>
+    <data name="GenericError" xml:space="preserve">
+        <value>Internal error encountered. You can try again</value>
+    </data>
+    <data name="context_length_exceeded" xml:space="preserve">
+        <value>Context lenght exceeded for current model</value>
+    </data>
+</root>

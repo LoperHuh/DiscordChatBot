@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discordbot
+  labels:
+    app: discordbot
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: discordbot
+    spec:
+      containers:
+        - name: discordbot
+          image: 'discordbot:latest'
