@@ -1,6 +1,4 @@
-﻿using Discord.WebSocket;
-
-namespace DiscordBot.BusinessLogic.CommandAction
+﻿namespace DiscordBot.BusinessLogic.CommandAction
 {
     public interface ICommandAction
     {

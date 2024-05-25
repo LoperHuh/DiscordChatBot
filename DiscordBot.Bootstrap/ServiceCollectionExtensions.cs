@@ -28,7 +28,10 @@ public static class ServiceCollectionExtensions
             })
             .AddSingleton<DiscordSocketClient>()
             .AddSingleton<GuildMessageReceiver>()
-            .AddSingleton<OpenAI_API.OpenAIAPI>(_ => new OpenAI_API.OpenAIAPI(configuration.GetGptToken()))
+            .AddSingleton<OpenAI_API.OpenAIAPI>(_ =>
+            {
+                return new OpenAI_API.OpenAIAPI(configuration.GetGptToken());
+            })
             .AddDbContext<SQLDataManager>(options =>
             {
                 options.UseNpgsql(configuration.GetDbConnectionString());

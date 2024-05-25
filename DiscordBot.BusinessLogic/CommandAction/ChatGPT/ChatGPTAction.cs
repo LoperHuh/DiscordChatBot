@@ -1,6 +1,8 @@
 ﻿using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OpenAI_API.Chat;
+using OpenAI_API.Models;
 
 namespace DiscordBot.BusinessLogic.CommandAction.ChatGPT
 {
@@ -41,7 +43,7 @@ namespace DiscordBot.BusinessLogic.CommandAction.ChatGPT
                 Conversation conversation = GetConversation(_guildId);
                 conversation.AppendUserInput(input);
                 response = await conversation.GetResponseFromChatbotAsync();
-                response = "Токенов затрачено:" + conversation.MostResentAPIResult.Usage.TotalTokens +
+                response = "Токенов затрачено:" + conversation.MostRecentApiResult.Usage.TotalTokens +
                            Environment.NewLine + response;
             }
             catch (Exception exception)
@@ -65,10 +67,9 @@ namespace DiscordBot.BusinessLogic.CommandAction.ChatGPT
 
                 errorMessageText += Environment.NewLine + "Контекст диалога будет сброшен. Отправь сообщение заново!";
                 response = errorMessageText;
+                GetNewConversation(_guildId);
             }
-
-            GetNewConversation(_guildId);
-
+            
             return new MessageHandleResult(response);
         }
 
@@ -84,7 +85,9 @@ namespace DiscordBot.BusinessLogic.CommandAction.ChatGPT
 
         private Conversation GetNewConversation(ulong guid)
         {
-            var conversation = _bot.Chat.CreateConversation();
+            var chatRequest = new ChatRequest();
+            chatRequest.Model= new Model("gpt-4o");
+            var conversation = _bot.Chat.CreateConversation(chatRequest);
             if (_conversationPerChannel.ContainsKey(guid))
             {
                 _conversationPerChannel[guid] = conversation;
