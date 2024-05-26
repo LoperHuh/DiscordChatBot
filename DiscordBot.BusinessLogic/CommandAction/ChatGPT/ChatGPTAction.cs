@@ -18,15 +18,29 @@ namespace DiscordBot.BusinessLogic.CommandAction.ChatGPT
             _bot = openAIAPI;
         }
 
-        public List<(string command, string description)> GetDescription()
-        {
-            return new List<(string command, string description)>
-                { ("ai", "AIChatDescription") };
-        }
-
         public List<ActionData> GetAvailableCommands()
         {
-            return new List<ActionData> { new ActionData("ai", "AIChatDescription", AIMessage) };
+            return new List<ActionData>
+            {
+                new ActionData("ai", "AIChatDescription", AIMessage),
+                new ActionData("draw", "AIChatDescription", AIDraw)
+            };
+        }
+
+        private async Task<MessageHandleResult> AIDraw(string input)
+        {
+            string response = string.Empty;
+            try
+            {
+                var result = await _bot.ImageGenerations.CreateImageAsync(input);
+                response = result.ToString();
+            }
+            catch (Exception exception)
+            {
+                response = ParseError(exception);
+            }
+
+            return new MessageHandleResult(response);
         }
 
         private async Task<MessageHandleResult> AIMessage(string input)
@@ -48,29 +62,35 @@ namespace DiscordBot.BusinessLogic.CommandAction.ChatGPT
             }
             catch (Exception exception)
             {
-                string errorMessageText;
-                try
-                {
-                    var pattern = @"^.*(?={)";
-                    var filteredMessage = Regex.Replace(exception.Message, pattern, "");
-                    var errorBody = JsonConvert.DeserializeObject<Dictionary<string, Object>>(filteredMessage);
-                    var parsedValues =
-                        JsonConvert.DeserializeObject<Dictionary<string, string>>(errorBody["error"].ToString());
-                    errorMessageText = _localizator.Localize(parsedValues["code"]) + Environment.NewLine +
-                                       parsedValues["message"];
-                }
-                catch (Exception ex)
-                {
-                    errorMessageText =
-                        $"Can't parse error due to exception: {ex.Message} {Environment.NewLine} FullMessage from chatGPT: {exception.Message}";
-                }
-
+                var errorMessageText = ParseError(exception);
                 errorMessageText += Environment.NewLine + "Контекст диалога будет сброшен. Отправь сообщение заново!";
                 response = errorMessageText;
                 GetNewConversation(_guildId);
             }
-            
+
             return new MessageHandleResult(response);
+        }
+
+        private string ParseError(Exception exception)
+        {
+            string errorMessageText;
+            try
+            {
+                var pattern = @"^.*(?={)";
+                var filteredMessage = Regex.Replace(exception.Message, pattern, "");
+                var errorBody = JsonConvert.DeserializeObject<Dictionary<string, Object>>(filteredMessage);
+                var parsedValues =
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(errorBody["error"].ToString());
+                errorMessageText = _localizator.Localize(parsedValues["code"]) + Environment.NewLine +
+                                   parsedValues["message"];
+            }
+            catch (Exception ex)
+            {
+                errorMessageText =
+                    $"Can't parse error due to exception: {ex.Message} {Environment.NewLine} FullMessage from chatGPT: {exception.Message}";
+            }
+
+            return errorMessageText;
         }
 
         private Conversation GetConversation(ulong guid)
@@ -86,7 +106,7 @@ namespace DiscordBot.BusinessLogic.CommandAction.ChatGPT
         private Conversation GetNewConversation(ulong guid)
         {
             var chatRequest = new ChatRequest();
-            chatRequest.Model= new Model("gpt-4o");
+            chatRequest.Model = new Model("gpt-4o");
             var conversation = _bot.Chat.CreateConversation(chatRequest);
             if (_conversationPerChannel.ContainsKey(guid))
             {

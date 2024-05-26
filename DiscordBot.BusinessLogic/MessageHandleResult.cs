@@ -1,6 +1,6 @@
 ﻿namespace DiscordBot.BusinessLogic;
 
-public struct MessageHandleResult
+public struct MessageHandleResult 
 {
     public string Message { get; }
     public bool Success { get; }
